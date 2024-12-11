@@ -1,5 +1,9 @@
 package com.ce.myallstarteam.player.entity;
 
+import com.ce.myallstarteam.player.dto.DefenseDto;
+import com.ce.myallstarteam.player.dto.HitterDto;
+import com.ce.myallstarteam.player.dto.PitcherDto;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,7 +31,7 @@ public class Player {
 
     private double dFieldingPercentage;
 
-    private String dCsp;
+    private double dCsp;
 
     private double hBattingAvg;
 
@@ -37,18 +41,83 @@ public class Player {
 
     private int hHomeRuns;
 
-    private int Era;
+    private double pEra;
 
     private int pWins;
 
     private int pSaves;
 
-    private int pWinningPercentage;
+    private double pWinningPercentage;
 
-    @Column(length = 50)
-    private String pHitsAllows;
+    private int pHitsAllows;
 
     private int pHra;
 
     private int pStrikeOuts;
+
+    public static Player fromDefenseDto(DefenseDto dto) {
+    	return Player.builder()
+    			.name(dto.getName())
+    			.teamName(dto.getTeamName())
+    			.dPosition(dto.getPosition())
+    			.dErrors(dto.getErrors())
+    			.dFieldingPercentage(dto.getFieldingPercentage())
+    			.dCsp(dto.getCsp())
+    			.build();
+    }
+    
+	public static Player fromPitcherDto(PitcherDto dto) {
+		return Player.builder()
+				.name(dto.getName())
+				.teamName(dto.getTeamName())
+				.pEra(dto.getEra())
+				.pWins(dto.getWins())
+				.pSaves(dto.getSaves())
+				.pWinningPercentage(dto.getWinningPercentage())
+				.pHitsAllows(dto.getHitsAllows())
+				.pHra(dto.getHra())
+				.pStrikeOuts(dto.getStrikeOuts())
+				.build();
+	}
+
+	public static Player fromHitterDto(HitterDto dto) {
+		return Player.builder()
+				.name(dto.getName())
+				.teamName(dto.getTeamName())
+				.hBattingAvg(dto.getBattingAvg())
+				.hRuns(dto.getRuns())
+				.hHits(dto.getHits())
+				.hHomeRuns(dto.getHomeRuns())
+				.build();
+	}
+	
+	public void updateDefenseField(DefenseDto dto) {
+		name = dto.getName();
+		teamName = dto.getTeamName();
+		dPosition = dto.getPosition();
+		dErrors = dto.getErrors();
+		dFieldingPercentage = dto.getFieldingPercentage();
+		dCsp = dto.getCsp();
+	}
+
+	public void updatePitcherField(PitcherDto dto) {
+		name = dto.getName();
+		teamName = dto.getTeamName();
+		pEra = dto.getEra();
+		pWins = dto.getWins();
+		pSaves =dto.getSaves();
+		pWinningPercentage = dto.getWinningPercentage();
+		pHitsAllows = dto.getHitsAllows();
+		pHra = dto.getHra();
+		pStrikeOuts = dto.getStrikeOuts();
+	}
+
+	public void updateHitterField(HitterDto dto) {
+		name = dto.getName();
+		teamName = dto.getTeamName();
+		hBattingAvg = dto.getBattingAvg();
+		hRuns = dto.getRuns();
+		hHits = dto.getHits();
+		hHomeRuns = dto.getHomeRuns();
+	}
 }
