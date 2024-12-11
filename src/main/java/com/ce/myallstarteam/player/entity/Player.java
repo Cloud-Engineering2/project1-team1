@@ -24,7 +24,7 @@ public class Player {
     @Column(name = "p_team", length = 50)
     private String teamName;
 
-    @Column(length = 30)
+    @Column(name = "d_position", length = 30)
     private String dPosition;
 
     private int dErrors;

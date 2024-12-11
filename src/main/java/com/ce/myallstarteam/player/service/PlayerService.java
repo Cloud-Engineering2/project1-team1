@@ -1,5 +1,6 @@
 package com.ce.myallstarteam.player.service;
 
+import com.ce.myallstarteam.player.entity.PlayerPosition;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,7 @@ import com.ce.myallstarteam.player.entity.Player;
 import com.ce.myallstarteam.player.repository.PlayerRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.util.StringUtils;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,23 +35,37 @@ import lombok.RequiredArgsConstructor;
 public class PlayerService {
     private final PlayerRepository playerRepository;
 
+    public Page<Player> findPlayers(String position, String name, int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+
+        if(StringUtils.hasText(position) && StringUtils.hasText(name)){
+            PlayerPosition.validateValue(position);
+            return playerRepository.findByNameAndPosition(position, name, pageable);
+        }else if(StringUtils.hasText(position)){
+            PlayerPosition.validateValue(position);
+            return playerRepository.findByPosition(position, pageable);
+        }else if(StringUtils.hasText(name)){
+            return playerRepository.findByName(name, pageable);
+        }
+        return playerRepository.findAll(pageable);
+    }
     @Transactional
     public void dataInit() {
         WebDriver driver = new ChromeDriver();
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
-            List<HitterDto> hitterDtos = hitterInit(driver, wait);
-            List<PitcherDto> pitcherDtos = pitcherInit(driver, wait);
-            List<DefenseDto> defenseDtos = defenseInit(driver, wait);
+            List<HitterDto> hitterDto = hitterInit(driver, wait);
+            List<PitcherDto> pitcherDto = pitcherInit(driver, wait);
+            List<DefenseDto> defenseDto = defenseInit(driver, wait);
 
             Map<String, Player> map = new HashMap<>();
-            addHitter(hitterDtos, map);
-            addPitcher(pitcherDtos, map);
-            addDefense(defenseDtos, map);
+            addHitter(hitterDto, map);
+            addPitcher(pitcherDto, map);
+            addDefense(defenseDto, map);
 
             playerRepository.saveAll(map.values());
         }finally {
-            if(driver!=null) driver.quit();
+            driver.quit();
         }
     }
 
@@ -152,5 +171,4 @@ public class PlayerService {
 
         return dtoList;
     }
-
 }
