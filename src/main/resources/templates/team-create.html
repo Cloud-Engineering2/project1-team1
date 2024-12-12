@@ -17,6 +17,7 @@
             justify-content: space-between;
             align-items: center;
         }
+
         #main-container {
             display: flex;
             justify-content: flex-start;
@@ -24,6 +25,7 @@
             gap: 20px;
             padding: 20px;
         }
+
         #team-main {
             position: relative;
             background-image: url('/images/baseball-field.png');
@@ -35,6 +37,7 @@
             flex-shrink: 0;
             border-radius: 5px;
         }
+
         .position {
             position: absolute;
             background-color: rgba(3, 169, 244, 0.7);
@@ -45,15 +48,55 @@
             transform: translate(-50%, -50%);
             cursor: pointer;
         }
-        .center-field { top: 23%; left: 50%; }
-        .right-field { top: 40%; right: 15%; transform: translate(50%, -50%); }
-        .left-field { top: 40%; left: 15%; }
-        .shortstop { top: 50%; right: 65%; transform: translate(50%, -50%); }
-        .second-base { top: 43%; left: 50%; }
-        .third-base { top: 67%; left: 25%; }
-        .first-base { top: 67%; right: 25%; transform: translate(50%, -50%); }
-        .pitcher { top: 67%; left: 50%; }
-        .catcher { bottom: 10%; left: 50%; transform: translate(-50%, 50%); }
+
+        .center-field {
+            top: 23%;
+            left: 50%;
+        }
+
+        .right-field {
+            top: 40%;
+            right: 15%;
+            transform: translate(50%, -50%);
+        }
+
+        .left-field {
+            top: 40%;
+            left: 15%;
+        }
+
+        .shortstop {
+            top: 50%;
+            right: 65%;
+            transform: translate(50%, -50%);
+        }
+
+        .second-base {
+            top: 43%;
+            left: 50%;
+        }
+
+        .third-base {
+            top: 67%;
+            left: 25%;
+        }
+
+        .first-base {
+            top: 67%;
+            right: 25%;
+            transform: translate(50%, -50%);
+        }
+
+        .pitcher {
+            top: 67%;
+            left: 50%;
+        }
+
+        .catcher {
+            bottom: 10%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+        }
 
         #search-area {
             background-color: #f8f9fa;
@@ -133,22 +176,66 @@
 
 <div id="main-container">
     <main id="team-main">
-        <div class="position center-field" data-position="중견수">중견수</div>
-        <div class="position right-field" data-position="우익수">우익수</div>
-        <div class="position left-field" data-position="좌익수">좌익수</div>
-        <div class="position shortstop" data-position="유격수">유격수</div>
-        <div class="position second-base" data-position="2루수">2루수</div>
-        <div class="position third-base" data-position="3루수">3루수</div>
-        <div class="position first-base" data-position="1루수">1루수</div>
-        <div class="position pitcher" data-position="투수">투수</div>
-        <div class="position catcher" data-position="포수">포수</div>
+        <form th:action="${team != null}? @{/api/v1/team/{userId}/{id} (userId=${team.userId}) (id=${team.id})} : @{/api/v1/team}"
+              th:method="${team != null}? put : post">
+            <input name="teamName" class="form-control form-control-lg" type="text" placeholder="팀 이름">
+            <input type="hidden" th:if="${team != null}" name="id" th:value="${team.id}">
+            <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/>
+            <div>
+                <div class="position center-field" data-position="중견수">
+                    <input type="hidden" id="center-field" th:value="1" name="teamPlayers[0].playerId"/>
+                    <input type="hidden" th:value="중견수" name="teamPlayers[0].position"/>
+                    중견수
+                </div>
+                <div class="position right-field" data-position="우익수">
+                    <input type="hidden" id="right-field" th:value="2" name="teamPlayers[1].playerId"/>
+                    <input type="hidden" th:value="우익수" name="teamPlayers[1].position"/>
+                    우익수
+                </div>
+                <div class="position left-field" data-position="좌익수">
+                    <input type="hidden" id="left-field" th:value="3" name="teamPlayers[2].playerId"/>
+                    <input type="hidden" th:value="좌익수" name="teamPlayers[2].position"/>
+                    좌익수
+                </div>
+                <div class="position shortstop" data-position="유격수">
+                    <input type="hidden" id="shortstop" th:value="4" name="teamPlayers[3].playerId"/>
+                    <input type="hidden" th:value="유격수" name="teamPlayers[3].position"/>
+                    유격수
+                </div>
+                <div class="position second-base" data-position="2루수">
+                    <input type="hidden" id="second-base" th:value="5" name="teamPlayers[4].playerId"/>
+                    <input type="hidden" th:value="2루수" name="teamPlayers[4].position"/>
+                    2루수
+                </div>
+                <div class="position third-base" data-position="3루수">
+                    <input type="hidden" id="third-base" th:value="6" name="teamPlayers[5].playerId"/>
+                    <input type="hidden" th:value="3루수" name="teamPlayers[5].position"/>
+                    3루수
+                </div>
+                <div class="position first-base" data-position="1루수">
+                    <input type="hidden" id="first-base" th:value="7" name="teamPlayers[6].playerId"/>
+                    <input type="hidden" th:value="1루수" name="teamPlayers[6].position"/>
+                    1루수
+                </div>
+                <div class="position pitcher" data-position="투수">
+                    <input type="hidden" id="pitcher" th:value="8" name="teamPlayers[7].playerId"/>
+                    <input type="hidden" th:value="투수" name="teamPlayers[7].position"/>
+                    투수
+                </div>
+                <div class="position catcher" data-position="포수">
+                    <input type="hidden" id="catcher" th:value="9" name="teamPlayers[8].playerId"/>
+                    <input type="hidden" th:value="포수" name="teamPlayers[8].position"/>
+                    포수
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </form>
     </main>
-
     <aside id="search-area">
         <h3 class="position-heading" id="selectedPositionText">포지션을 선택하세요</h3>
         <div class="mb-3">
             <label for="playerNameInput" class="form-label">선수 이름 검색</label>
-            <input type="text" class="form-control" id="playerNameInput" name="name" placeholder="이름 입력" />
+            <input type="text" class="form-control" id="playerNameInput" name="name" placeholder="이름 입력"/>
         </div>
         <div class="d-flex justify-content-end">
             <button type="button" class="btn btn-primary" id="searchButton">검색</button>
@@ -198,7 +285,9 @@
                 </div>
             </div>
             <div class="card-footer d-flex justify-content-end">
-                <button type="button" class="btn btn-success" id="assignPlayerButton" data-selected-position="">이 선수 할당</button>
+                <button type="button" class="btn btn-success" id="assignPlayerButton" data-selected-position="">이 선수
+                    할당
+                </button>
             </div>
         </div>
     </aside>
@@ -220,20 +309,20 @@
     });
 
     document.getElementById('searchButton').addEventListener('click', () => {
-        if(!selectedPosition) {
+        if (!selectedPosition) {
             alert('먼저 필드에서 할당할 포지션을 선택하세요.');
             return;
         }
 
         const name = document.getElementById('playerNameInput').value;
         let url = '/api/v1/players?position=' + encodeURIComponent(selectedPosition) + '&page=0';
-        if(name) {
+        if (name) {
             url += '&name=' + encodeURIComponent(name);
         }
 
         fetch(url)
             .then(response => {
-                if(!response.ok) {
+                if (!response.ok) {
                     throw new Error('검색 요청 실패');
                 }
                 return response.json();
@@ -241,7 +330,7 @@
             .then(data => {
                 const resultsEl = document.getElementById('searchResults');
                 resultsEl.innerHTML = '';
-                if(data && data.content && data.content.length > 0) {
+                if (data && data.content && data.content.length > 0) {
                     data.content.forEach(player => {
                         const div = document.createElement('div');
                         div.classList.add('player-result-item');
@@ -295,20 +384,24 @@
 
     assignButton.addEventListener('click', () => {
         const assignedPosition = assignButton.getAttribute('data-selected-position');
-        if(!assignedPosition) {
+        if (!assignedPosition) {
             alert('먼저 필드에서 할당할 포지션을 선택하세요.');
             return;
         }
 
         const playerNameText = document.getElementById('playerName').textContent;
         document.querySelectorAll('#team-main .position').forEach(posEl => {
-            if(posEl.getAttribute('data-position') === assignedPosition) {
+            if (posEl.getAttribute('data-position') === assignedPosition) {
                 posEl.textContent = assignedPosition + '\n' + playerNameText;
             }
         });
 
         alert(playerNameText + ' 선수가 ' + assignedPosition + ' 포지션에 할당되었습니다.');
     });
+
+    function inputValues() {
+
+    }
 </script>
 </body>
 </html>
