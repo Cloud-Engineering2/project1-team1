@@ -2,10 +2,12 @@ package com.ce.myallstarteam.player.dto;
 
 import com.ce.myallstarteam.player.entity.Player;
 import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @Builder
+@AllArgsConstructor
 public class PlayerDto {
     private Integer id;
     private String name;

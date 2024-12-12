@@ -44,6 +44,7 @@ public class UserController {
         }
 
         return "redirect:/api/v1/user/login";
+
     }
 
     @GetMapping("/login")
