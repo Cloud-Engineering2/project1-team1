@@ -25,7 +25,6 @@ public class UserController {
     @GetMapping("/sign-up")
     public String signUpPage() {
         return "signUp";
-
     }
 
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
