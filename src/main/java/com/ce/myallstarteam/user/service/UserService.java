@@ -18,7 +18,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     public void registerUser(UserRequest userRequest) {
 
-        // pw 암호화 처리 필요!
         if (userRequest != null) {
             String encryptedPassword = passwordEncoder.encode(userRequest.getPassword());
 

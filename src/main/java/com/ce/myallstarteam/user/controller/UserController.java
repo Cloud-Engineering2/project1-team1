@@ -23,13 +23,13 @@ public class UserController {
 
     @GetMapping("/sign-up")
     public String signUpPage() {
-
-        return "signUp";
+        
     }
 
     @PostMapping("/sign-up")
-    public String signUp(UserRequest userRequest){
+    public String signUp(@RequestBody UserRequest userRequest){
 
+        System.out.println(userRequest);
         if (userRequest != null) {
             userService.registerUser(userRequest);
         }
