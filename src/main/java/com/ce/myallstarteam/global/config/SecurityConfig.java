@@ -1,6 +1,7 @@
 package com.ce.myallstarteam.global.config;
 
 import com.ce.myallstarteam.global.security.CustomAuthenticationSuccessHandler;
+import com.ce.myallstarteam.global.security.UserIdAuthorizationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +21,19 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
+
+                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/api/v1/user/login", "/api/v1/user/sign-up", "/api/v1/user/check-username")
+                                                    .permitAll()
+                                                .anyRequest().authenticated()
+                                        )
+                .addFilterAfter(new UserIdAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                                response.sendRedirect("/api/v1/user/login");
+                        })
+                )
 
                 .formLogin(form ->
                         form

@@ -20,9 +20,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         int userId = userDetails.getId(); // 사용자 ID 가져오기
 
         // 동적인 URL로 리디렉션
-//        response.sendRedirect("/api/v1/team/" + userId);
-        response.sendRedirect("/api/v1/user/sign-up");
-
+        response.sendRedirect("/api/v1/team/" + userId);
     }
 
 }

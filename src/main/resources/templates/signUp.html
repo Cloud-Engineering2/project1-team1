@@ -20,7 +20,7 @@
             color: #c94d4d;
         }
         .message.success {
-            color: rgb(61, 134, 252);
+            color: rgb(9, 171, 85);
         }
         .form {
             width: 400px;
@@ -45,7 +45,7 @@
             border-radius: 15px;
             outline: none;
             padding-left: 10px;
-            background-color: rgb(115, 161, 236);
+            background-color: rgb(9, 171, 85);
             color: aliceblue;
             font-weight: bold;
             margin-top: 20px;
@@ -57,7 +57,6 @@
             const usernameInput = document.getElementById("username");
             const username = usernameInput.value;
             const messageSpan = document.getElementById("usernameMessage");
-            const signUpButton = document.getElementById("signUpButton");
 
             // 3자 이상 입력 시 비동기 요청
             if (username.length >= 3) {
@@ -86,19 +85,54 @@
                 messageSpan.className = "message error";
                 isUsernameAvailable = false;
             }
-
             // 버튼 비활성화
+            updateSignUpButtonState();
+        }
+
+        let isPasswordSame = false;
+        async function checkPassword() {
+            const passwordInput = document.getElementById("password");
+            const passwordCheckInput = document.getElementById("passwordCheck");
+            const password = passwordInput.value;
+            const passwordCheck = passwordCheckInput.value;
+
+            const pwMessageSpan = document.getElementById("passwordCheckMessage");
+
+            // 1자 이상 시 문구 출력
+            if (passwordCheck.length >= 1) {
+                try {
+                    if (password === passwordCheck) {
+                        pwMessageSpan.textContent = "비밀번호가 일치합니다.";
+                        pwMessageSpan.className = "message success";
+                        isPasswordSame = true;
+                    } else {
+                        pwMessageSpan.textContent = "비밀번호가 일치하지 않습니다.";
+                        pwMessageSpan.className = "message error";
+                        isPasswordSame = false;
+                    }
+                } catch (error) {
+                    console.error("Error checking username:", error);
+                    pwMessageSpan.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+                    pwMessageSpan.className = "message error";
+                    isPasswordSame = false;
+                }
+            } else {
+                // 초기화
+                pwMessageSpan.textContent = "비밀번호를 확인해주세요.";
+                pwMessageSpan.className = "message error";
+                isPasswordSame = false;
+            }
+
             updateSignUpButtonState();
         }
         function updateSignUpButtonState() {
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-            const passwordConfirm = document.getElementById("passwordCheck").value;
             const email = document.getElementById("email").value;
             const signUpButton = document.getElementById("signUpButton");
 
             // 모든 입력 필드가 채워지고 사용자 이름이 사용 가능할 때 버튼 활성화
-            signUpButton.disabled = !(username.length >= 3 && isUsernameAvailable && password && passwordConfirm && email);
+            signUpButton.disabled = !(username.length >= 3 && isUsernameAvailable && password && isPasswordSame && email);
         }
     </script>
 </head>
@@ -120,7 +154,12 @@
         <tr><td class="text">비밀번호</td></tr>
         <tr><td><input type="password" class="form" id="password" name="password" placeholder="Password" oninput="updateSignUpButtonState();" required /> <br /></td></tr>
         <tr><td class="text">비밀번호 확인</td></tr>
-        <tr><td><input type="password" class="form" id="passwordCheck" placeholder="Password Check" oninput="updateSignUpButtonState();"></td></tr>
+        <tr>
+            <td>
+                <input type="password" class="form" id="passwordCheck" placeholder="Password Check" oninput="checkPassword();">
+                <span id="passwordCheckMessage" class="message"></span>
+            </td>
+        </tr>
         <tr><td class="text">이메일</td></tr>
         <tr><td><input type="email" class="form" id="email" name="email" placeholder="Email" oninput="updateSignUpButtonState();" required /> <br /></td></tr>
         <tr>
