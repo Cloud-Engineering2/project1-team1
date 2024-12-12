@@ -7,7 +7,7 @@
            sec:authorize="isAuthenticated()">
             Welcome, <span th:text="${#authentication.principal.username}"></span>
         </p>
-        <form action="/logout" method="POST" style="margin: 0;" sec:authorize="isAuthenticated()">
+        <form action="/api/v1/user/logout" method="POST" style="margin: 0;" sec:authorize="isAuthenticated()">
             <button type="submit" style="
                 width: 74px;
                 height: 40px;
