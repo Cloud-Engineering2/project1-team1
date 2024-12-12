@@ -21,7 +21,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         // 동적인 URL로 리디렉션
 //        response.sendRedirect("/api/v1/team/" + userId);
-        response.sendRedirect("/api/v1/user/sign-up");
+        response.sendRedirect("/api/v1/user/test");
 
     }
 

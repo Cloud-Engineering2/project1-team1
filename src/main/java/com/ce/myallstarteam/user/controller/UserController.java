@@ -2,6 +2,7 @@ package com.ce.myallstarteam.user.controller;
 
 import com.ce.myallstarteam.user.repository.UserRepository;
 import com.ce.myallstarteam.user.request.UserRequest;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,19 +24,27 @@ public class UserController {
 
     @GetMapping("/sign-up")
     public String signUpPage() {
-        
+        return "signUp";
+
     }
 
-    @PostMapping("/sign-up")
-    public String signUp(@RequestBody UserRequest userRequest){
+    @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public String signUpWithJson(@RequestBody UserRequest userRequest){
 
-        System.out.println(userRequest);
         if (userRequest != null) {
             userService.registerUser(userRequest);
         }
 
         return "redirect:/api/v1/user/login";
+    }
+    @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String signUpWithForm(UserRequest userRequest){
 
+        if (userRequest != null) {
+            userService.registerUser(userRequest);
+        }
+
+        return "redirect:/api/v1/user/login";
     }
 
     @GetMapping("/login")
@@ -51,9 +60,10 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/api/v1/user/login";
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
+
 
 }

@@ -20,6 +20,17 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
 
+                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("/api/v1/user/login", "/api/v1/user/sign-up")
+                                                    .permitAll()
+                                                .anyRequest().authenticated()
+                                        )
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint((request, response, authException) -> {
+                                response.sendRedirect("/api/v1/user/login");
+                        })
+                )
+
                 .formLogin(form ->
                         form
                                 .loginPage("/api/v1/user/login")
