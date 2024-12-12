@@ -1,11 +1,11 @@
-<header th:fragment="headerLayout">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px; background-color: #f8f9fa;">
-        <div>
-            <h1>Build Your Own All-Star Dream Team!</h1>
+<header th:fragment="headerLayout" style="display: flex; justify-content: space-between">
+    <div>
+        <div style="display: inline-block">
+            <h1>My All-Star Team</h1>
         </div>
-        <div style="display: flex; align-items: center; margin-right: 20px">
+        <div style="display: flex; align-items: center; margin-left: auto; float: right"> <!-- margin-left: auto 추가 -->
             <p id="usernameDisplay" style="margin-right: 10px; font-size: 1.1em; font-weight: bold; line-height: 40px"
-                sec:authorize="isAuthenticated()">
+               sec:authorize="isAuthenticated()">
                 Welcome, <span th:text="${#authentication.principal.username}"></span>
             </p>
             <form action="/logout" method="POST" style="margin: 0;" sec:authorize="isAuthenticated()">
@@ -13,18 +13,14 @@
                     width: 74px;
                     height: 40px;
                     font-size: 15px;
-                    border: 0;
-                    border-radius: 15px;
+                    background-color: white;
+                    color: #0073e6;
+                    border: none;
+                    border-radius: 5px;
+                    padding: 10px 15px;
+                    cursor: pointer;
                     outline: none;
-                    padding-left: 10px;
-                    background-color: rgb(9, 171, 85);
-                    color: aliceblue;
-                    font-weight: bold;
-                    margin-top: 20px;
                     margin-left: 10px;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
                 ">
                     Logout
                 </button>
@@ -32,3 +28,8 @@
         </div>
     </div>
 </header>
+
+
+
+
+
