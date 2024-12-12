@@ -1,23 +1,47 @@
 package com.ce.myallstarteam.player.dto;
 
 import com.ce.myallstarteam.player.entity.Player;
-import com.ce.myallstarteam.player.entity.PlayerPosition;
+import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class PlayerDto {
-    private int id;
+    private Integer id;
     private String name;
-    private String position;
+    private String teamName;
+    private String dPosition;
+    private Integer dErrors;
+    private Double dFieldingPercentage;
+    private Double dCsp;
+    private Double hBattingAvg;
+    private Integer hRuns;
+    private Integer hHits;
+    private Integer hHomeRuns;
+    private Double pEra;
+    private Integer pWins;
+    private Integer pSaves;
+    private Integer pStrikeOuts;
 
-    public static PlayerDto from(Player player) {
-        return new PlayerDto(
-                player.getId(),
-                player.getName(),
-                player.getDPosition()
-        );
+    public static PlayerDto fromEntity(Player player) {
+        return PlayerDto.builder()
+                .id(player.getId())
+                .name(player.getName())
+                .teamName(player.getTeamName())
+                .dPosition(player.getDPosition())
+                .dErrors(player.getDErrors())
+                .dFieldingPercentage(player.getDFieldingPercentage())
+                .dCsp(player.getDCsp())
+                .hBattingAvg(player.getHBattingAvg())
+                .hRuns(player.getHRuns())
+                .hHits(player.getHHits())
+                .hHomeRuns(player.getHHomeRuns())
+                .pEra(player.getPEra())
+                .pWins(player.getPWins())
+                .pSaves(player.getPSaves())
+                .pStrikeOuts(player.getPStrikeOuts())
+                .build();
     }
-
 }

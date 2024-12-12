@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
 <head>
     <title>My All-Star Team</title>
     <style>
@@ -17,34 +17,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        header h1 {
-            margin: 0;
-        }
-
-        .user-actions {
-            display: flex;
-            align-items: center;
-        }
-
-        .user-actions span {
-            margin-right: 15px;
-            font-weight: bold;
-        }
-
-        .user-actions button {
-            background-color: white;
-            color: #0073e6;
-            border: 1px solid #0073e6;
-            border-radius: 5px;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .user-actions button:hover {
-            background-color: #005bb5;
-            color: white;
         }
 
         main {
@@ -116,13 +88,7 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>My All-Star Team</h1>
-    <div class="user-actions">
-        <span th:text="${username}">Guest</span>
-        <button onclick="location.href='/api/v1/user/logout'">Logout</button>
-    </div>
-</header>
+<th:block th:replace="/layout/header.html :: headerLayout"></th:block>
 <main>
     <div class="team-header">
         <h2>My Teams</h2>
