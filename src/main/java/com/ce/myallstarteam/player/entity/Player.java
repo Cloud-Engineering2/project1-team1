@@ -12,6 +12,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Table(
+    indexes = {
+        @Index(
+            name = "idx__p_name",
+            columnList = "p_name"
+        ),
+        @Index(
+            name = "idx__d_position",
+            columnList = "d_position"
+        )
+    }
+)
 public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
