@@ -50,5 +50,13 @@ public class Team {
     
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
     private final List<TeamPlayer> teamPlayers = new ArrayList<>();
-    
+
+    private Team(User user, String name) {
+        this.user = user;
+        this.name = name;
+    }
+
+    public static Team of(User user, String name) {
+        return new Team(user, name);
+    }
 }

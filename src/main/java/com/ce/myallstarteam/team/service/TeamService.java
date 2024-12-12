@@ -1,25 +1,30 @@
 package com.ce.myallstarteam.team.service;
 
+import com.ce.myallstarteam.player.entity.Player;
+import com.ce.myallstarteam.player.repository.PlayerRepository;
 import com.ce.myallstarteam.team.dto.TeamDto;
 import com.ce.myallstarteam.team.dto.TeamPlayerDto;
 import com.ce.myallstarteam.team.entity.Team;
+import com.ce.myallstarteam.team.entity.TeamPlayer;
+import com.ce.myallstarteam.team.repository.TeamPlayerRepository;
 import com.ce.myallstarteam.team.repository.TeamRepository;
+import com.ce.myallstarteam.user.dto.UserDto;
 import com.ce.myallstarteam.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class TeamService {
 
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
-
-    public TeamService(TeamRepository teamRepository, UserRepository userRepository) {
-        this.teamRepository = teamRepository;
-        this.userRepository = userRepository;
-    }
+    private final PlayerRepository playerRepository;
+    private final TeamPlayerRepository teamPlayerRepository;
 
     public boolean isUserExists(int userId) {
         return userRepository.existsById(userId);
@@ -54,4 +59,20 @@ public class TeamService {
                 }).orElse(false);
     }
 
+    @Transactional
+    public void createTeam(TeamDto teamDto) {
+        UserDto userDto = UserDto.fromEntity(
+                userRepository.findById(teamDto.getUserId()).orElseThrow());
+
+        Team savedTeam = teamRepository.save(teamDto.toEntity(userDto));
+
+        List<TeamPlayer> teamPlayers = teamDto.getTeamPlayers().stream()
+                .map(dto -> TeamPlayer.builder()
+                        .team(savedTeam)
+                        .player(playerRepository.findById(dto.getPlayerId()).orElseThrow())
+                        .build())
+                .toList();
+
+        teamPlayerRepository.saveAll(teamPlayers);
+    }
 }

@@ -49,6 +49,13 @@ public class TeamController {
         return "team-create"; // team-create.html을 반환
     }
 
+    @PostMapping("/team")
+    public String createTeam(@ModelAttribute TeamDto teamDto) {
+        teamService.createTeam(teamDto);
+        System.out.println(teamDto);
+        return "redirect:/team/" + teamDto.getId(); // user id
+    }
+
     @DeleteMapping("/team/{userId}/{teamId}")
     public ResponseEntity<Void> deleteTeamByUserIdAndTeamId(
             @PathVariable int userId,
