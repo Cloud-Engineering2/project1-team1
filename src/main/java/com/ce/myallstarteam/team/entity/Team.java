@@ -2,6 +2,7 @@ package com.ce.myallstarteam.team.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -48,6 +49,6 @@ public class Team {
     private LocalDateTime modifiedDate;
     
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
-    private final ArrayList<TeamPlayer> teamPlayers = new ArrayList<>();
+    private final List<TeamPlayer> teamPlayers = new ArrayList<>();
     
 }

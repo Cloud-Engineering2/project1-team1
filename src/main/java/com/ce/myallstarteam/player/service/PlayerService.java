@@ -49,6 +49,11 @@ public class PlayerService {
         }
         return playerRepository.findAll(pageable);
     }
+
+    public Player findPlayerDetail(int playerId) {
+        return playerRepository.findById(playerId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 선수입니다."));
+    }
+
     @Transactional
     public void dataInit() {
         WebDriver driver = new ChromeDriver();

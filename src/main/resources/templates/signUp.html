@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SignUp Page</title>
+    <style>
+        table {
+            width: 280px;
+            height: 550px;
+            margin: auto;
+            font-size: 25px;
+        }
+        .message {
+            font-size: 14px;
+            font-weight: bold;
+            font-family: sans-serif;
+            margin-left: 10px;
+        }
+        .message.error {
+            color: #c94d4d;
+        }
+        .message.success {
+            color: rgb(61, 134, 252);
+        }
+        .form {
+            width: 400px;
+            height: 50px;
+            font-size: 17px;
+            border: 0;
+            border-radius: 15px;
+            outline: none;
+            padding-left: 10px;
+            background-color: rgb(233,233,233);
+        }
+        .text {
+            font-size: 14px;
+            font-weight: bold;
+            color: #484747;
+        }
+        .btn {
+            width: 410px;
+            height: 50px;
+            font-size: 17px;
+            border: 0;
+            border-radius: 15px;
+            outline: none;
+            padding-left: 10px;
+            background-color: rgb(115, 161, 236);
+            color: aliceblue;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+    <script>
+        let isUsernameAvailable = false; // 사용자 이름 사용 가능 여부
+        async function checkUsername() {
+            const usernameInput = document.getElementById("username");
+            const username = usernameInput.value;
+            const messageSpan = document.getElementById("usernameMessage");
+            const signUpButton = document.getElementById("signUpButton");
+
+            // 3자 이상 입력 시 비동기 요청
+            if (username.length >= 3) {
+                try {
+                    const response = await fetch(`/api/v1/user/check-username?username=${username}`);
+                    const data = await response.json();
+
+                    if (data.available) {
+                        messageSpan.textContent = "사용 가능한 사용자 이름입니다.";
+                        messageSpan.className = "message success";
+                        isUsernameAvailable = true;
+                    } else {
+                        messageSpan.textContent = "이미 사용 중인 사용자 이름입니다.";
+                        messageSpan.className = "message error";
+                        isUsernameAvailable = false;
+                    }
+                } catch (error) {
+                    console.error("Error checking username:", error);
+                    messageSpan.textContent = "오류가 발생했습니다. 다시 시도해주세요.";
+                    messageSpan.className = "message error";
+                    isUsernameAvailable = false;
+                }
+            } else {
+                // 초기화
+                messageSpan.textContent = "사용자 이름은 3자 이상이어야 합니다.";
+                messageSpan.className = "message error";
+                isUsernameAvailable = false;
+            }
+
+            // 버튼 비활성화
+            updateSignUpButtonState();
+        }
+        function updateSignUpButtonState() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const passwordConfirm = document.getElementById("passwordCheck").value;
+            const email = document.getElementById("email").value;
+            const signUpButton = document.getElementById("signUpButton");
+
+            // 모든 입력 필드가 채워지고 사용자 이름이 사용 가능할 때 버튼 활성화
+            signUpButton.disabled = !(username.length >= 3 && isUsernameAvailable && password && passwordConfirm && email);
+        }
+    </script>
+</head>
+<body>
+<hr />
+<form action="/api/v1/user/sign-up" method="POST">
+    <table>
+        <tr>
+            <td><h2>Sign Up</h2></td>
+        </tr>
+        <tr><td class="text">ID</td></tr>
+        <tr>
+            <td>
+                <input type="text" id="username" class="form" name="username" placeholder="Username" oninput="checkUsername()" required />
+                <span id="usernameMessage" class="message"></span> <!-- 결과 메시지 표시 -->
+            <br />
+            </td>
+        </tr>
+        <tr><td class="text">비밀번호</td></tr>
+        <tr><td><input type="password" class="form" id="password" name="password" placeholder="Password" oninput="updateSignUpButtonState();" required /> <br /></td></tr>
+        <tr><td class="text">비밀번호 확인</td></tr>
+        <tr><td><input type="password" class="form" id="passwordCheck" placeholder="Password Check" oninput="updateSignUpButtonState();"></td></tr>
+        <tr><td class="text">이메일</td></tr>
+        <tr><td><input type="email" class="form" id="email" name="email" placeholder="Email" oninput="updateSignUpButtonState();" required /> <br /></td></tr>
+        <tr>
+            <td>
+                <button type="submit" id="signUpButton" class="btn">SignUp</button>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

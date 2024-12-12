@@ -1,19 +1,22 @@
 package com.ce.myallstarteam.team.dto;
 
-
-import com.ce.myallstarteam.player.dto.PlayerDto;
-import lombok.AllArgsConstructor;
+import com.ce.myallstarteam.team.entity.Team;
+import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @Getter
-@AllArgsConstructor
+@Builder
 public class TeamDto {
-    private int teamId;
-    private int userId;
-    private List<PlayerDto> players;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
+
+    private final int id;
+    private final String teamName;
+    private final int userId;
+
+    public static TeamDto fromEntity(Team team) {
+        return TeamDto.builder()
+                .id(team.getId())
+                .teamName(team.getName())
+                .userId(team.getUser().getId()) // 사용자 ID 설정
+                .build();
+    }
 }
