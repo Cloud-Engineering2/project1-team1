@@ -17,7 +17,7 @@ public enum PlayerPosition {
     LEFT_FIELDER("좌익수"),
     SHORT_STOP("유격수");
 
-    private String position;
+    private final String position;
 
     public static void validateValue(String position){
         Arrays.stream(values())
