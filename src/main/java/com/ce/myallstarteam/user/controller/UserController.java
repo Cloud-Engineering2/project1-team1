@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.ce.myallstarteam.user.dto.UserDto;
 import com.ce.myallstarteam.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@RequestBody UserRequest userRequest){
+    public String signUp(UserRequest userRequest){
 
         System.out.println(userRequest);
         if (userRequest != null) {

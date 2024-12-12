@@ -1,6 +1,5 @@
 package com.ce.myallstarteam.team.service;
 
-import com.ce.myallstarteam.player.entity.Player;
 import com.ce.myallstarteam.player.repository.PlayerRepository;
 import com.ce.myallstarteam.team.dto.TeamDto;
 import com.ce.myallstarteam.team.dto.TeamPlayerDto;
@@ -69,6 +68,7 @@ public class TeamService {
         List<TeamPlayer> teamPlayers = teamDto.getTeamPlayers().stream()
                 .map(dto -> TeamPlayer.builder()
                         .team(savedTeam)
+                        .position(dto.getPosition())
                         .player(playerRepository.findById(dto.getPlayerId()).orElseThrow())
                         .build())
                 .toList();

@@ -52,8 +52,7 @@ public class TeamController {
     @PostMapping("/team")
     public String createTeam(@ModelAttribute TeamDto teamDto) {
         teamService.createTeam(teamDto);
-        System.out.println(teamDto);
-        return "redirect:/team/" + teamDto.getId(); // user id
+        return "redirect:/api/v1/team/" + teamDto.getUserId(); // user id
     }
 
     @DeleteMapping("/team/{userId}/{teamId}")
