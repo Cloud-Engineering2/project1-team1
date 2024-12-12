@@ -42,7 +42,10 @@ public class SecurityConfig {
                                 .successHandler(customAuthenticationSuccessHandler())
                 )
 
-                .logout(logout -> logout.logoutSuccessUrl("/api/v1/user/login"));
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/api/v1/user/logout")
+                                .logoutSuccessUrl("/api/v1/user/login"));
 
         return http.build();
     }
