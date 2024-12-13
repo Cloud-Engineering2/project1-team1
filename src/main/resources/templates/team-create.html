@@ -4,10 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Team Create</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-T3c6uQNChNx2O8J7DJM4ML8nCEUjs1R3IkJZcXPZxWffjs8EXmZ67NoQa6etIei9"
-          crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <style>
         header {
             background-color: #0073e6;
@@ -279,6 +276,17 @@
         </div>
 
         <div class="player-search-result-list" id="searchResults"></div>
+        <div class="d-flex justify-content-center mt-3">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link">Prev</a></li>
+                    <li class="page-item"><a class="page-link">1</a></li>
+                    <li class="page-item"><a class="page-link">2</a></li>
+                    <li class="page-item"><a class="page-link">3</a></li>
+                    <li class="page-item"><a class="page-link">Next</a></li>
+                </ul>
+            </nav>
+        </div>
     </aside>
 
     <aside id="player-detail">
@@ -333,9 +341,7 @@
     </aside>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 <script>
     let selectedPosition = null;
     const assignButton = document.getElementById('assignPlayerButton');
@@ -348,15 +354,23 @@
         });
     });
 
+    let currentPage = 0;
+    let totalPages = 1;
+
     document.getElementById('searchButton').addEventListener('click', () => {
         if (!selectedPosition) {
             alert('먼저 필드에서 할당할 포지션을 선택하세요.');
             return;
         }
 
+        currentPage = 0;  // 검색 버튼 클릭 시 첫 페이지로 리셋
+        performSearch();
+    });
+
+    function performSearch() {
         const name = document.getElementById('playerNameInput').value;
-        let url = '/api/v1/players?position=' + encodeURIComponent(selectedPosition) + '&page=0';
-        if (name) {
+        let url = '/api/v1/players?position=' + encodeURIComponent(selectedPosition) + '&page=' + currentPage;
+        if(name) {
             url += '&name=' + encodeURIComponent(name);
         }
 
@@ -381,6 +395,8 @@
                         });
                         resultsEl.appendChild(div);
                     });
+                    totalPages = data.totalPages;
+                    updatePagination();
                 } else {
                     resultsEl.innerHTML = '<div>검색 결과가 없습니다.</div>';
                 }
@@ -389,7 +405,50 @@
                 console.error(error);
                 alert('검색 중 오류가 발생했습니다.');
             });
-    });
+    }
+
+    function updatePagination() {
+        const paginationEl = document.querySelector('.pagination');
+        paginationEl.innerHTML = '';
+
+        // prev
+        const prevLi = document.createElement('li');
+        prevLi.classList.add('page-item');
+        prevLi.innerHTML = '<a class="page-link" href="#">Prev</a>';
+        prevLi.addEventListener('click', () => changePage(currentPage - 1));
+        prevLi.classList.toggle('disabled', currentPage === 0);
+        paginationEl.appendChild(prevLi);
+
+        // 페이지 번호 최대 3개
+        let startPage = Math.max(0, currentPage - 1);
+        let endPage = Math.min(totalPages - 1, startPage + 2);
+        if (endPage - startPage < 2) {
+            startPage = Math.max(0, endPage - 2);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const li = document.createElement('li');
+            li.classList.add('page-item');
+            if (i === currentPage) li.classList.add('active');
+            li.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
+            li.addEventListener('click', () => changePage(i));
+            paginationEl.appendChild(li);
+        }
+
+        // next
+        const nextLi = document.createElement('li');
+        nextLi.classList.add('page-item');
+        nextLi.innerHTML = '<a class="page-link" href="#">Next</a>';
+        nextLi.addEventListener('click', () => changePage(currentPage + 1));
+        nextLi.classList.toggle('disabled', currentPage === totalPages - 1);
+        paginationEl.appendChild(nextLi);
+    }
+
+    function changePage(newPage) {
+        if (newPage < 0 || newPage >= totalPages) return;
+        currentPage = newPage;
+        performSearch();
+    }
 
     function showPlayerDetails(player) {
         const playerCard = document.getElementById('playerCard');
