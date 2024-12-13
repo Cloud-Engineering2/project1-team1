@@ -123,14 +123,7 @@
     </style>
 </head>
 <body>
-<header>
-    <h1>My All-Star Team</h1>
-    <div class="user-actions">
-        <span th:text="${username}">Guest</span>
-        <button class="btn btn-light" onclick="location.href='/api/v1/user/logout'">Logout</button>
-    </div>
-</header>
-
+<th:block th:replace="/layout/header.html :: headerLayout"></th:block>
 <div id="main-container">
     <main id="team-main">
         <div class="position center-field" data-position="중견수">중견수</div>
