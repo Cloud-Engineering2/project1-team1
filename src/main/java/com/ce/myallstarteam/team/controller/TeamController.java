@@ -4,17 +4,18 @@ import com.ce.myallstarteam.team.dto.TeamDto;
 import com.ce.myallstarteam.team.dto.TeamPlayerDto;
 import com.ce.myallstarteam.team.service.TeamService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/team")
 public class TeamController {
 
     private final TeamService teamService;
@@ -23,7 +24,7 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    @GetMapping("/team/{userId}")
+    @GetMapping("/{userId}")
     public String getTeamsByUserId(
             @PathVariable int userId,
             String search,
@@ -36,18 +37,41 @@ public class TeamController {
         return "main"; // main.html로 연결
     }
 
-    @GetMapping("/team/form")
+    @GetMapping("/form")
     public String createTeamForm() {
         return "team-create"; // team-create.html을 반환
     }
 
-    @PostMapping("/team")
+    @PostMapping
     public String createTeam(@ModelAttribute TeamDto teamDto) {
         teamService.createTeam(teamDto);
         return "redirect:/api/v1/team/" + teamDto.getUserId(); // user id
     }
 
-    @DeleteMapping("/team/{userId}/{teamId}")
+    @GetMapping("/{userId}/{teamId}/form")
+    public String updateTeamForm(@PathVariable int userId, @PathVariable int teamId, Model model) {
+        if (!teamService.isUserExists(userId)) {
+            throw new IllegalArgumentException("User not found.");
+        }
+        TeamDto teamDto = teamService.findTeamById(teamId);
+        Map<String, TeamPlayerDto> teamPlayersMap = new HashMap<>();
+        teamDto.getTeamPlayers().forEach(player -> teamPlayersMap.put(player.getPosition(), player));
+
+        model.addAttribute("team", teamDto);
+        model.addAttribute("teamPlayersMap", teamPlayersMap);
+        return "team-create";
+    }
+
+    @PutMapping("/{userId}/{teamId}")
+    public String updateTeam(@ModelAttribute TeamDto teamDto, @PathVariable int userId, @PathVariable int teamId) {
+        if (!teamService.isUserExists(userId)) {
+            throw new IllegalArgumentException("user not found.");
+        }
+        teamService.updateTeam(teamId, teamDto);
+        return "redirect:/api/v1/team/" + userId; // user id
+    }
+
+    @DeleteMapping("/{userId}/{teamId}")
     public String deleteTeamByUserIdAndTeamId(@PathVariable int userId, @PathVariable int teamId) {
         boolean deleted = teamService.deleteTeam(userId, teamId);
         if (deleted) {

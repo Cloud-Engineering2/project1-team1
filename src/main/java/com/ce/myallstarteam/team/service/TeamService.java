@@ -75,4 +75,23 @@ public class TeamService {
 
         teamPlayerRepository.saveAll(teamPlayers);
     }
+
+    public TeamDto findTeamById(int teamId) {
+        return TeamDto.fromEntity(teamRepository.findById(teamId).orElseThrow());
+    }
+
+    @Transactional
+    public void updateTeam(int teamId, TeamDto teamDto) {
+        Team team = teamRepository.findById(teamId).orElseThrow();
+        List<TeamPlayer> teamPlayers = teamDto.getTeamPlayers().stream()
+                .map(dto -> TeamPlayer.builder()
+                        .team(team)
+                        .position(dto.getPosition())
+                        .player(playerRepository.findById(dto.getPlayerId()).orElseThrow())
+                        .build())
+                .toList();
+
+        team.updateTeamName(teamDto.getTeamName());
+        team.updateTeamPlayers(teamPlayers);
+    }
 }
