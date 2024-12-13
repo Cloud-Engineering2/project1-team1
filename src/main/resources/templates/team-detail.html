@@ -61,7 +61,33 @@
     </style>
 </head>
 <body>
-<th:block th:replace="/layout/header.html :: headerLayout"></th:block>
+<header th:fragment="headerLayout" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+    <div>
+        <h1>My All-Star Team</h1>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <p id="usernameDisplay" style="margin-right: 10px; font-size: 1.1em; font-weight: bold;"
+           sec:authorize="isAuthenticated()">
+            Welcome, <span th:text="${#authentication.principal.username}"></span>
+        </p>
+        <form action="/api/v1/user/logout" method="POST" style="margin: 0;" sec:authorize="isAuthenticated()">
+            <button type="submit" style="
+                width: 74px;
+                height: 40px;
+                font-size: 15px;
+                background-color: white;
+                color: #0073e6;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 15px;
+                cursor: pointer;
+                outline: none;
+            ">
+                Logout
+            </button>
+        </form>
+    </div>
+</header>
 <div id="main-container">
     <main id="team-main">
         <div class="position center-field" th:if="${positions['중견수'] != null}"
