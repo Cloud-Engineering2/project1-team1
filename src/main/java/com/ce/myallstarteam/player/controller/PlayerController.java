@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/players")
 @RequiredArgsConstructor
@@ -22,9 +24,9 @@ public class PlayerController {
 
     @GetMapping
     ResponseEntity<Page<Player>> searchPlayers(
-        @RequestParam("position") String position,
-        @RequestParam("name") String name,
-        @RequestParam("page") int page
+            @RequestParam(value = "position", required = false) String position,
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "page", defaultValue = "0") int page
     ){
         return new ResponseEntity<>(playerService.findPlayers(position, name, page), HttpStatus.OK);
     }
