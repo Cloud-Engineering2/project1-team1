@@ -182,55 +182,92 @@
             <input type="hidden" th:if="${team != null}" name="id" th:value="${team.id}">
             <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/>
             <div>
-                <div class="position center-field" data-position="중견수">
-                    <input type="hidden" id="center-field" th:value="1" name="teamPlayers[0].playerId"/>
-                    <input type="hidden" th:value="중견수" name="teamPlayers[0].position"/>
+                <div class="position center-field" data-position="중견수"
+                     th:text="'중견수' + ${teamPlayersMap != null ? teamPlayersMap['중견수'].playerName : ''}">
                     중견수
                 </div>
-                <div class="position right-field" data-position="우익수">
-                    <input type="hidden" id="right-field" th:value="2" name="teamPlayers[1].playerId"/>
-                    <input type="hidden" th:value="우익수" name="teamPlayers[1].position"/>
+                <input type="hidden" class="player-id"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['중견수'].playerId : ''}"
+                       name="teamPlayers[0].playerId"/>
+                <input type="hidden" th:value="중견수" name="teamPlayers[0].position"/>
+
+                <div class="position right-field" data-position="우익수"
+                    th:text="'우익수' + ${teamPlayersMap != null ? teamPlayersMap['우익수'].playerName : ''}">
                     우익수
                 </div>
-                <div class="position left-field" data-position="좌익수">
-                    <input type="hidden" id="left-field" th:value="3" name="teamPlayers[2].playerId"/>
-                    <input type="hidden" th:value="좌익수" name="teamPlayers[2].position"/>
+                <input type="hidden" class="player-id" id="right-field"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['우익수'].playerId : ''}"
+                       name="teamPlayers[1].playerId"/>
+                <input type="hidden" th:value="우익수" name="teamPlayers[1].position"/>
+
+                <div class="position left-field" data-position="좌익수"
+                    th:text="'좌익수' + ${teamPlayersMap != null ? teamPlayersMap['좌익수'].playerName : ''}">
                     좌익수
                 </div>
-                <div class="position shortstop" data-position="유격수">
-                    <input type="hidden" id="shortstop" th:value="4" name="teamPlayers[3].playerId"/>
-                    <input type="hidden" th:value="유격수" name="teamPlayers[3].position"/>
+                <input type="hidden" class="player-id" id="left-field"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['좌익수'].playerId : ''}"
+                       name="teamPlayers[2].playerId"/>
+                <input type="hidden" th:value="좌익수" name="teamPlayers[2].position"/>
+
+                <div class="position shortstop" data-position="유격수"
+                    th:text="'유격수' + ${teamPlayersMap != null ? teamPlayersMap['유격수'].playerName : ''}">
                     유격수
                 </div>
-                <div class="position second-base" data-position="2루수">
-                    <input type="hidden" id="second-base" th:value="5" name="teamPlayers[4].playerId"/>
-                    <input type="hidden" th:value="2루수" name="teamPlayers[4].position"/>
+                <input type="hidden" class="player-id" id="shortstop"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['유격수'].playerId : ''}"
+                       name="teamPlayers[3].playerId"/>
+                <input type="hidden" th:value="유격수" name="teamPlayers[3].position"/>
+
+                <div class="position second-base" data-position="2루수"
+                    th:text="'2루수' + ${teamPlayersMap != null ? teamPlayersMap['2루수'].playerName : ''}">
                     2루수
                 </div>
-                <div class="position third-base" data-position="3루수">
-                    <input type="hidden" id="third-base" th:value="6" name="teamPlayers[5].playerId"/>
-                    <input type="hidden" th:value="3루수" name="teamPlayers[5].position"/>
+                <input type="hidden" class="player-id" id="second-base"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['2루수'].playerId : ''}"
+                       name="teamPlayers[4].playerId"/>
+                <input type="hidden" th:value="2루수" name="teamPlayers[4].position"/>
+
+                <div class="position third-base" data-position="3루수"
+                    th:text="'3루수' + ${teamPlayersMap != null ? teamPlayersMap['3루수'].playerName : ''}">
                     3루수
                 </div>
-                <div class="position first-base" data-position="1루수">
-                    <input type="hidden" id="first-base" th:value="7" name="teamPlayers[6].playerId"/>
-                    <input type="hidden" th:value="1루수" name="teamPlayers[6].position"/>
+                <input type="hidden" class="player-id" id="third-base"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['3루수'].playerId : ''}"
+                       name="teamPlayers[5].playerId"/>
+                <input type="hidden" th:value="3루수" name="teamPlayers[5].position"/>
+
+                <div class="position first-base" data-position="1루수"
+                    th:text="'1루수' + ${teamPlayersMap != null ? teamPlayersMap['1루수'].playerName : ''}">
                     1루수
                 </div>
-                <div class="position pitcher" data-position="투수">
-                    <input type="hidden" id="pitcher" th:value="8" name="teamPlayers[7].playerId"/>
-                    <input type="hidden" th:value="투수" name="teamPlayers[7].position"/>
+                <input type="hidden" class="player-id" id="first-base"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['1루수'].playerId : ''}"
+                       name="teamPlayers[6].playerId"/>
+                <input type="hidden" th:value="1루수" name="teamPlayers[6].position"/>
+
+                <div class="position pitcher" data-position="투수"
+                    th:text="'투수' + ${teamPlayersMap != null ? teamPlayersMap['투수'].playerName : ''}">
                     투수
                 </div>
-                <div class="position catcher" data-position="포수">
-                    <input type="hidden" id="catcher" th:value="9" name="teamPlayers[8].playerId"/>
-                    <input type="hidden" th:value="포수" name="teamPlayers[8].position"/>
+                <input type="hidden" class="player-id" id="pitcher"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['투수'].playerId : ''}"
+                       name="teamPlayers[7].playerId"/>
+                <input type="hidden" th:value="투수" name="teamPlayers[7].position"/>
+
+                <div class="position catcher" data-position="포수"
+                    th:text="'포수' + ${teamPlayersMap != null ? teamPlayersMap['포수'].playerName : ''}">
                     포수
                 </div>
+                <input type="hidden" class="player-id" id="catcher"
+                       th:value="${teamPlayersMap != null ? teamPlayersMap['포수'].playerId : ''}"
+                       name="teamPlayers[8].playerId"/>
+                <input type="hidden" th:value="포수" name="teamPlayers[8].position"/>
+
             </div>
             <button type="submit" class="btn btn-primary">등록</button>
         </form>
     </main>
+
     <aside id="search-area">
         <h3 class="position-heading" id="selectedPositionText">포지션을 선택하세요</h3>
         <div class="mb-3">
@@ -250,6 +287,9 @@
             <div class="card-body">
                 <p><strong>이름:</strong> <span id="playerName">-</span></p>
                 <p><strong>팀:</strong> <span id="playerTeam">-</span></p>
+
+                <!-- Hidden input for Player ID -->
+                <input type="hidden" id="hiddenPlayerId"/>
 
                 <!-- 투수 수치 -->
                 <div id="pitcherDetails" class="mb-3">
@@ -335,6 +375,7 @@
                         const div = document.createElement('div');
                         div.classList.add('player-result-item');
                         div.textContent = player.name + ' (' + player.teamName + ')';
+                        div.setAttribute('data-id', player.id);
                         div.addEventListener('click', () => {
                             showPlayerDetails(player);
                         });
@@ -375,6 +416,18 @@
         document.getElementById('playerHits').textContent = player.hhits ?? '-';
         document.getElementById('playerHomeRuns').textContent = player.hhomeRuns ?? '-';
 
+        // PID를 hidden input에 저장
+        const hiddenInput = document.getElementById('hiddenPlayerId');
+        if (!hiddenInput) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.id = 'hiddenPlayerId';
+            input.value = player.id;
+            playerCard.appendChild(input);
+        } else {
+            hiddenInput.value = player.id;
+        }
+
         // 카드 표시
         playerCard.classList.remove('d-none');
 
@@ -390,18 +443,27 @@
         }
 
         const playerNameText = document.getElementById('playerName').textContent;
+        const playerId = document.getElementById('hiddenPlayerId').value; // 숨겨진 input에서 ID 가져오기
+
+        console.log(`선수 ID: ${playerId}, 포지션: ${assignedPosition}`);
+
         document.querySelectorAll('#team-main .position').forEach(posEl => {
             if (posEl.getAttribute('data-position') === assignedPosition) {
-                posEl.textContent = assignedPosition + '\n' + playerNameText;
+                posEl.textContent = `${assignedPosition}\n${playerNameText}`;
+
+                let siblingInput = posEl.nextElementSibling;
+                while (siblingInput) {
+                    if (siblingInput.classList && siblingInput.classList.contains('player-id')) {
+                        siblingInput.value = playerId;  // 원하는 값 설정
+                        break;  // 첫 번째로 찾은 sibling에 값을 설정하고 루프 종료
+                    }
+                    siblingInput = siblingInput.nextElementSibling;  // 다음 형제로 이동
+                }
             }
         });
 
-        alert(playerNameText + ' 선수가 ' + assignedPosition + ' 포지션에 할당되었습니다.');
+        alert(`${playerNameText} 선수가 ${assignedPosition} 포지션에 할당되었습니다.`);
     });
-
-    function inputValues() {
-
-    }
 </script>
 </body>
 </html>
