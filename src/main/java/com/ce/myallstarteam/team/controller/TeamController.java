@@ -1,6 +1,7 @@
 package com.ce.myallstarteam.team.controller;
 
 import com.ce.myallstarteam.team.dto.TeamDto;
+import com.ce.myallstarteam.team.dto.TeamPlayerDto;
 import com.ce.myallstarteam.team.service.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -9,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/api/v1/team")
@@ -51,8 +54,11 @@ public class TeamController {
             throw new IllegalArgumentException("User not found.");
         }
         TeamDto teamDto = teamService.findTeamById(teamId);
-        model.addAttribute("team", teamDto);
+        Map<String, TeamPlayerDto> teamPlayersMap = new HashMap<>();
+        teamDto.getTeamPlayers().forEach(player -> teamPlayersMap.put(player.getPosition(), player));
 
+        model.addAttribute("team", teamDto);
+        model.addAttribute("teamPlayersMap", teamPlayersMap);
         return "team-create";
     }
 

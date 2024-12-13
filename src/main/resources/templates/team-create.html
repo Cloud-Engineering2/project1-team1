@@ -173,14 +173,14 @@
 
 <div id="main-container">
     <main id="team-main">
-        <form th:action="${team != null}? @{/api/v1/team/{userId}/{id} (userId=${team.userId}) (id=${team.id})} : @{/api/v1/team}"
+        <form th:action="${team != null}? @{/api/v1/team/{userId}/{id} (userId=${#authentication.principal.id}, id=${team.id})} : @{/api/v1/team}"
               th:method="${team != null}? put : post">
-            <input name="teamName" class="form-control form-control-lg" type="text" placeholder="팀 이름">
+            <input name="teamName" th:value="${team?.teamName}" class="form-control form-control-lg" type="text" placeholder="팀 이름">
             <input type="hidden" th:if="${team != null}" name="id" th:value="${team.id}">
             <input type="hidden" name="userId" th:value="${#authentication.principal.id}"/>
             <div>
                 <div class="position center-field" data-position="중견수"
-                     th:text="'중견수' + ${teamPlayersMap != null ? teamPlayersMap['중견수'].playerName : ''}">
+                     th:text="'중견수 ' + ${teamPlayersMap != null ? teamPlayersMap['중견수'].playerName : ''}">
                     중견수
                 </div>
                 <input type="hidden" class="player-id"
@@ -189,7 +189,7 @@
                 <input type="hidden" th:value="중견수" name="teamPlayers[0].position"/>
 
                 <div class="position right-field" data-position="우익수"
-                    th:text="'우익수' + ${teamPlayersMap != null ? teamPlayersMap['우익수'].playerName : ''}">
+                    th:text="'우익수 ' + ${teamPlayersMap != null ? teamPlayersMap['우익수'].playerName : ''}">
                     우익수
                 </div>
                 <input type="hidden" class="player-id" id="right-field"
@@ -198,7 +198,7 @@
                 <input type="hidden" th:value="우익수" name="teamPlayers[1].position"/>
 
                 <div class="position left-field" data-position="좌익수"
-                    th:text="'좌익수' + ${teamPlayersMap != null ? teamPlayersMap['좌익수'].playerName : ''}">
+                    th:text="'좌익수 ' + ${teamPlayersMap != null ? teamPlayersMap['좌익수'].playerName : ''}">
                     좌익수
                 </div>
                 <input type="hidden" class="player-id" id="left-field"
@@ -207,7 +207,7 @@
                 <input type="hidden" th:value="좌익수" name="teamPlayers[2].position"/>
 
                 <div class="position shortstop" data-position="유격수"
-                    th:text="'유격수' + ${teamPlayersMap != null ? teamPlayersMap['유격수'].playerName : ''}">
+                    th:text="'유격수 ' + ${teamPlayersMap != null ? teamPlayersMap['유격수'].playerName : ''}">
                     유격수
                 </div>
                 <input type="hidden" class="player-id" id="shortstop"
@@ -216,7 +216,7 @@
                 <input type="hidden" th:value="유격수" name="teamPlayers[3].position"/>
 
                 <div class="position second-base" data-position="2루수"
-                    th:text="'2루수' + ${teamPlayersMap != null ? teamPlayersMap['2루수'].playerName : ''}">
+                    th:text="'2루수 ' + ${teamPlayersMap != null ? teamPlayersMap['2루수'].playerName : ''}">
                     2루수
                 </div>
                 <input type="hidden" class="player-id" id="second-base"
@@ -225,7 +225,7 @@
                 <input type="hidden" th:value="2루수" name="teamPlayers[4].position"/>
 
                 <div class="position third-base" data-position="3루수"
-                    th:text="'3루수' + ${teamPlayersMap != null ? teamPlayersMap['3루수'].playerName : ''}">
+                    th:text="'3루수 ' + ${teamPlayersMap != null ? teamPlayersMap['3루수'].playerName : ''}">
                     3루수
                 </div>
                 <input type="hidden" class="player-id" id="third-base"
@@ -234,7 +234,7 @@
                 <input type="hidden" th:value="3루수" name="teamPlayers[5].position"/>
 
                 <div class="position first-base" data-position="1루수"
-                    th:text="'1루수' + ${teamPlayersMap != null ? teamPlayersMap['1루수'].playerName : ''}">
+                    th:text="'1루수 ' + ${teamPlayersMap != null ? teamPlayersMap['1루수'].playerName : ''}">
                     1루수
                 </div>
                 <input type="hidden" class="player-id" id="first-base"
@@ -243,7 +243,7 @@
                 <input type="hidden" th:value="1루수" name="teamPlayers[6].position"/>
 
                 <div class="position pitcher" data-position="투수"
-                    th:text="'투수' + ${teamPlayersMap != null ? teamPlayersMap['투수'].playerName : ''}">
+                    th:text="'투수 ' + ${teamPlayersMap != null ? teamPlayersMap['투수'].playerName : ''}">
                     투수
                 </div>
                 <input type="hidden" class="player-id" id="pitcher"
@@ -252,7 +252,7 @@
                 <input type="hidden" th:value="투수" name="teamPlayers[7].position"/>
 
                 <div class="position catcher" data-position="포수"
-                    th:text="'포수' + ${teamPlayersMap != null ? teamPlayersMap['포수'].playerName : ''}">
+                    th:text="'포수 ' + ${teamPlayersMap != null ? teamPlayersMap['포수'].playerName : ''}">
                     포수
                 </div>
                 <input type="hidden" class="player-id" id="catcher"
