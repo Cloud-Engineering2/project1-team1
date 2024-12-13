@@ -42,7 +42,7 @@ public class TeamController {
         return "team-create"; // team-create.html을 반환
     }
 
-    @PostMapping("/")
+    @PostMapping
     public String createTeam(@ModelAttribute TeamDto teamDto) {
         teamService.createTeam(teamDto);
         return "redirect:/api/v1/team/" + teamDto.getUserId(); // user id
