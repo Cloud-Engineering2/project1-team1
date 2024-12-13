@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseball Team</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        header {
+            background-color: #0073e6;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #main-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 20px;
+        }
+        #team-main {
+            position: relative;
+            background-image: url('/images/baseball-field.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 700px;
+            height: 700px;
+        }
+        .position {
+            position: absolute;
+            background-color: rgba(3, 169, 244, 0.7);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+        }
+        .center-field { top: 23%; left: 50%; cursor: pointer;}
+        .right-field { top: 40%; right: 15%; transform: translate(50%, -50%); cursor: pointer;}
+        .left-field { top: 40%; left: 15%; cursor: pointer;}
+        .shortstop { top: 50%; right: 65%; transform: translate(50%, -50%); cursor: pointer;}
+        .second-base { top: 43%; left: 50%; cursor: pointer;}
+        .third-base { top: 67%; left: 25%; cursor: pointer;}
+        .first-base { top: 67%; right: 25%; transform: translate(50%, -50%); cursor: pointer;}
+        .pitcher { top: 67%; left: 50%; cursor: pointer;}
+        .catcher { bottom: 10%; left: 50%; transform: translate(-50%, 50%); cursor: pointer;}
+
+        #team-player-list {
+            max-width: 300px;
+        }
+
+        .player-item {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<header th:fragment="headerLayout" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+    <div>
+        <h1>My All-Star Team</h1>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <p id="usernameDisplay" style="margin-right: 10px; font-size: 1.1em; font-weight: bold;"
+           sec:authorize="isAuthenticated()">
+            Welcome, <span th:text="${#authentication.principal.username}"></span>
+        </p>
+        <form action="/api/v1/user/logout" method="POST" style="margin: 0;" sec:authorize="isAuthenticated()">
+            <button type="submit" style="
+                width: 74px;
+                height: 40px;
+                font-size: 15px;
+                background-color: white;
+                color: #0073e6;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 15px;
+                cursor: pointer;
+                outline: none;
+            ">
+                Logout
+            </button>
+        </form>
+    </div>
+</header>
+<div id="main-container">
+    <main id="team-main">
+        <div class="position center-field" th:if="${positions['중견수'] != null}"
+             th:data-player-id="${positions['중견수'].id}"
+             th:data-player-name="${positions['중견수'].name}"
+             th:data-player-team="${positions['중견수'].teamName}"
+             th:data-player-position="${positions['중견수'].dPosition}"
+             th:data-player-errors="${positions['중견수'].dErrors}"
+             th:data-player-fielding="${positions['중견수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['중견수'].dCsp}"
+             th:data-player-batting-avg="${positions['중견수'].hBattingAvg}"
+             th:data-player-runs="${positions['중견수'].hRuns}"
+             th:data-player-hits="${positions['중견수'].hHits}"
+             th:data-player-home-runs="${positions['중견수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">중견수</div>
+        <div class="position right-field" th:if="${positions['우익수'] != null}"
+             th:data-player-id="${positions['우익수'].id}"
+             th:data-player-name="${positions['우익수'].name}"
+             th:data-player-team="${positions['우익수'].teamName}"
+             th:data-player-position="${positions['우익수'].dPosition}"
+             th:data-player-errors="${positions['우익수'].dErrors}"
+             th:data-player-fielding="${positions['우익수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['우익수'].dCsp}"
+             th:data-player-batting-avg="${positions['우익수'].hBattingAvg}"
+             th:data-player-runs="${positions['우익수'].hRuns}"
+             th:data-player-hits="${positions['우익수'].hHits}"
+             th:data-player-home-runs="${positions['우익수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">우익수</div>
+        <div class="position left-field" th:if="${positions['좌익수'] != null}"
+             th:data-player-id="${positions['좌익수'].id}"
+             th:data-player-name="${positions['좌익수'].name}"
+             th:data-player-team="${positions['좌익수'].teamName}"
+             th:data-player-position="${positions['좌익수'].dPosition}"
+             th:data-player-errors="${positions['좌익수'].dErrors}"
+             th:data-player-fielding="${positions['좌익수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['좌익수'].dCsp}"
+             th:data-player-batting-avg="${positions['좌익수'].hBattingAvg}"
+             th:data-player-runs="${positions['좌익수'].hRuns}"
+             th:data-player-hits="${positions['좌익수'].hHits}"
+             th:data-player-home-runs="${positions['좌익수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">좌익수</div>
+        <div class="position shortstop" th:if="${positions['유격수'] != null}"
+             th:data-player-id="${positions['유격수'].id}"
+             th:data-player-name="${positions['유격수'].name}"
+             th:data-player-team="${positions['유격수'].teamName}"
+             th:data-player-position="${positions['유격수'].dPosition}"
+             th:data-player-errors="${positions['유격수'].dErrors}"
+             th:data-player-fielding="${positions['유격수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['유격수'].dCsp}"
+             th:data-player-batting-avg="${positions['유격수'].hBattingAvg}"
+             th:data-player-runs="${positions['유격수'].hRuns}"
+             th:data-player-hits="${positions['유격수'].hHits}"
+             th:data-player-home-runs="${positions['유격수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">유격수</div>
+        <div class="position second-base" th:if="${positions['2루수'] != null}"
+             th:data-player-id="${positions['2루수'].id}"
+             th:data-player-name="${positions['2루수'].name}"
+             th:data-player-team="${positions['2루수'].teamName}"
+             th:data-player-position="${positions['2루수'].dPosition}"
+             th:data-player-errors="${positions['2루수'].dErrors}"
+             th:data-player-fielding="${positions['2루수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['2루수'].dCsp}"
+             th:data-player-batting-avg="${positions['2루수'].hBattingAvg}"
+             th:data-player-runs="${positions['2루수'].hRuns}"
+             th:data-player-hits="${positions['2루수'].hHits}"
+             th:data-player-home-runs="${positions['2루수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">2루수</div>
+        <div class="position third-base" th:if="${positions['3루수'] != null}"
+             th:data-player-id="${positions['3루수'].id}"
+             th:data-player-name="${positions['3루수'].name}"
+             th:data-player-team="${positions['3루수'].teamName}"
+             th:data-player-position="${positions['3루수'].dPosition}"
+             th:data-player-errors="${positions['3루수'].dErrors}"
+             th:data-player-fielding="${positions['3루수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['3루수'].dCsp}"
+             th:data-player-batting-avg="${positions['3루수'].hBattingAvg}"
+             th:data-player-runs="${positions['3루수'].hRuns}"
+             th:data-player-hits="${positions['3루수'].hHits}"
+             th:data-player-home-runs="${positions['3루수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">3루수</div>
+        <div class="position first-base" th:if="${positions['1루수'] != null}"
+             th:data-player-id="${positions['1루수'].id}"
+             th:data-player-name="${positions['1루수'].name}"
+             th:data-player-team="${positions['1루수'].teamName}"
+             th:data-player-position="${positions['1루수'].dPosition}"
+             th:data-player-errors="${positions['1루수'].dErrors}"
+             th:data-player-fielding="${positions['1루수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['1루수'].dCsp}"
+             th:data-player-batting-avg="${positions['1루수'].hBattingAvg}"
+             th:data-player-runs="${positions['1루수'].hRuns}"
+             th:data-player-hits="${positions['1루수'].hHits}"
+             th:data-player-home-runs="${positions['1루수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">1루수</div>
+        <div class="position pitcher" th:if="${positions['투수'] != null}"
+             th:data-player-id="${positions['투수'].id}"
+             th:data-player-name="${positions['투수'].name}"
+             th:data-player-team="${positions['투수'].teamName}"
+             th:data-player-era="${positions['투수'].pEra}"
+             th:data-player-wins="${positions['투수'].pWins}"
+             th:data-player-saves="${positions['투수'].pSaves}"
+             th:data-player-strikeouts="${positions['투수'].pStrikeOuts}"
+             th:data-player-batting-avg="${positions['투수'].hBattingAvg}"
+             th:data-player-runs="${positions['투수'].hRuns}"
+             th:data-player-hits="${positions['투수'].hHits}"
+             th:data-player-home-runs="${positions['투수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">투수</div>
+        <div class="position catcher" th:if="${positions['포수'] != null}"
+             th:data-player-id="${positions['포수'].id}"
+             th:data-player-name="${positions['포수'].name}"
+             th:data-player-team="${positions['포수'].teamName}"
+             th:data-player-position="${positions['포수'].dPosition}"
+             th:data-player-errors="${positions['포수'].dErrors}"
+             th:data-player-fielding="${positions['포수'].dFieldingPercentage}"
+             th:data-player-csp="${positions['포수'].dCsp}"
+             th:data-player-batting-avg="${positions['포수'].hBattingAvg}"
+             th:data-player-runs="${positions['포수'].hRuns}"
+             th:data-player-hits="${positions['포수'].hHits}"
+             th:data-player-home-runs="${positions['포수'].hHomeRuns}"
+             data-bs-toggle="modal" data-bs-target="#playerModal">포수</div>
+    </main>
+
+    <aside id="team-player-list" style="padding: 20px; background-color: #f8f9fa; border-radius: 8px; width: 400px;">
+        <h3 style="border-bottom: 2px solid #0073e6; padding-bottom: 10px; margin-bottom: 20px; color: #0073e6;">팀 선수 목록</h3>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['투수'] != null}">
+                <span>투수</span><span th:text="${positions['투수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['포수'] != null}">
+                <span>포수</span><span th:text="${positions['포수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['1루수'] != null}">
+                <span>1루수</span><span th:text="${positions['1루수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['2루수'] != null}">
+                <span>2루수</span><span th:text="${positions['2루수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['3루수'] != null}">
+                <span>3루수</span><span th:text="${positions['3루수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['유격수'] != null}">
+                <span>유격수</span><span th:text="${positions['유격수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['우익수'] != null}">
+                <span>우익수</span><span th:text="${positions['우익수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['중견수'] != null}">
+                <span>중견수</span><span th:text="${positions['중견수'].name}"></span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center" th:if="${positions['좌익수'] != null}">
+                <span>좌익수</span><span th:text="${positions['좌익수'].name}"></span>
+            </li>
+        </ul>
+        <!-- Update and Delete buttons -->
+        <div class="d-flex justify-content-end align-items-center mt-4">
+            <a th:href="@{/api/v1/team/{userId}/{teamId}/form(userId=${userId}, teamId=${teamId})}"
+               class="btn btn-primary me-2">Update</a>
+            <form th:action="@{/api/v1/team/{userId}/{teamId}(userId=${userId}, teamId=${teamId})}" method="post"
+                  onsubmit="return confirm('정말로 삭제하시겠습니까?');" style="display: inline;">
+                <input type="hidden" name="_method" value="delete"/>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+    </aside>
+</div>
+
+<div class="modal fade" id="playerModal" tabindex="-1" aria-labelledby="playerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="playerModalLabel">선수 정보</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>이름:</strong> <span id="playerName">-</span></p>
+                <p><strong>팀:</strong> <span id="playerTeam">-</span></p>
+                <div id="pitcherDetails" class="d-none">
+                    <h6>투수 수치:</h6>
+                    <ul>
+                        <li><strong>ERA:</strong> <span id="playerEra">-</span></li>
+                        <li><strong>승:</strong> <span id="playerWins">-</span></li>
+                        <li><strong>세이브:</strong> <span id="playerSaves">-</span></li>
+                        <li><strong>삼진:</strong> <span id="playerStrikeouts">-</span></li>
+                    </ul>
+                </div>
+                <div id="defenseDetails" class="d-none">
+                    <h6>수비 수치:</h6>
+                    <ul>
+                        <li><strong>포지션:</strong> <span id="playerPosition">-</span></li>
+                        <li><strong>실책:</strong> <span id="playerErrors">-</span></li>
+                        <li><strong>수비율:</strong> <span id="playerFielding">-</span></li>
+                        <li><strong>CS%:</strong> <span id="playerCsp">-</span></li>
+                    </ul>
+                </div>
+                <div id="hitterDetails" class="d-none">
+                    <h6>타자 수치:</h6>
+                    <ul>
+                        <li><strong>타율:</strong> <span id="playerBattingAvg">-</span></li>
+                        <li><strong>득점:</strong> <span id="playerRuns">-</span></li>
+                        <li><strong>안타:</strong> <span id="playerHits">-</span></li>
+                        <li><strong>홈런:</strong> <span id="playerHomeRuns">-</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const playerModal = document.getElementById('playerModal');
+
+        playerModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+
+            const playerName = document.getElementById('playerName');
+            const playerTeam = document.getElementById('playerTeam');
+            const pitcherDetails = document.getElementById('pitcherDetails');
+            const defenseDetails = document.getElementById('defenseDetails');
+            const hitterDetails = document.getElementById('hitterDetails');
+
+            playerName.textContent = button.getAttribute('data-player-name') || '-';
+            playerTeam.textContent = button.getAttribute('data-player-team') || '-';
+
+            // Clear all sections
+            pitcherDetails.classList.add('d-none');
+            defenseDetails.classList.add('d-none');
+            hitterDetails.classList.add('d-none');
+
+            // Always show hitter details if available
+            if (button.getAttribute('data-player-batting-avg')) {
+                hitterDetails.classList.remove('d-none');
+                document.getElementById('playerBattingAvg').textContent = button.getAttribute('data-player-batting-avg') || '-';
+                document.getElementById('playerRuns').textContent = button.getAttribute('data-player-runs') || '-';
+                document.getElementById('playerHits').textContent = button.getAttribute('data-player-hits') || '-';
+                document.getElementById('playerHomeRuns').textContent = button.getAttribute('data-player-home-runs') || '-';
+            }
+
+            // Show pitcher details if available
+            if (button.getAttribute('data-player-era')) {
+                pitcherDetails.classList.remove('d-none');
+                document.getElementById('playerEra').textContent = button.getAttribute('data-player-era') || '-';
+                document.getElementById('playerWins').textContent = button.getAttribute('data-player-wins') || '-';
+                document.getElementById('playerSaves').textContent = button.getAttribute('data-player-saves') || '-';
+                document.getElementById('playerStrikeouts').textContent = button.getAttribute('data-player-strikeouts') || '-';
+            }
+
+            // Show defense details if available
+            if (button.getAttribute('data-player-position')) {
+                defenseDetails.classList.remove('d-none');
+                document.getElementById('playerPosition').textContent = button.getAttribute('data-player-position') || '-';
+                document.getElementById('playerErrors').textContent = button.getAttribute('data-player-errors') || '-';
+                document.getElementById('playerFielding').textContent = button.getAttribute('data-player-fielding') || '-';
+                document.getElementById('playerCsp').textContent = button.getAttribute('data-player-csp') || '-';
+            }
+        });
+    });
+</script>
+</body>
+</html>

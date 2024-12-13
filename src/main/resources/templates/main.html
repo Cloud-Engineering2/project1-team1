@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.springframework.org/schema/security">
+<head>
+    <title>My All-Star Team</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0073e6;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        main {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .team-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .team-header h2 {
+            margin: 0;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            width: 250px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #0073e6;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005bb5;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        li {
+            background-color: white;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        li a {
+            text-decoration: none;
+            color: #0073e6;
+            font-weight: bold;
+        }
+
+        li a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<header th:fragment="headerLayout" style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+    <div>
+        <h1>My All-Star Team</h1>
+    </div>
+    <div style="display: flex; align-items: center;">
+        <p id="usernameDisplay" style="margin-right: 10px; font-size: 1.1em; font-weight: bold;"
+           sec:authorize="isAuthenticated()">
+            Welcome, <span th:text="${#authentication.principal.username}"></span>
+        </p>
+        <form action="/api/v1/user/logout" method="POST" style="margin: 0;" sec:authorize="isAuthenticated()">
+            <button type="submit" style="
+                width: 74px;
+                height: 40px;
+                font-size: 15px;
+                background-color: white;
+                color: #0073e6;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 15px;
+                cursor: pointer;
+                outline: none;
+            ">
+                Logout
+            </button>
+        </form>
+    </div>
+</header>
+<main>
+    <div class="team-header">
+        <h2>My Teams</h2>
+        <form action="/api/v1/team/form" method="get">
+            <button type="submit">Create Team</button>
+        </form>
+    </div>
+    <form action="#" method="get" style="text-align: center;">
+        <input type="text" name="search" placeholder="Search by Team Name" th:value="${search}" />
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        <li th:each="team : ${teams}">
+            <a th:href="@{/api/v1/team/{userId}/{teamId}(userId=${team.userId}, teamId=${team.id})}"
+               th:text="${team.teamName}"></a>
+        </li>
+    </ul>
+</main>
+</body>
+</html>
