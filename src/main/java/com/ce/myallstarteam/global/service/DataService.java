@@ -12,6 +12,8 @@ import com.ce.myallstarteam.team.repository.TeamPlayerRepository;
 import com.ce.myallstarteam.team.repository.TeamRepository;
 import com.ce.myallstarteam.user.entity.User;
 import com.ce.myallstarteam.user.repository.UserRepository;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +26,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -98,7 +102,21 @@ public class DataService {
     }
 
     public Collection<Player> playerDataInit() {
-        WebDriver driver = new ChromeDriver();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments(
+            "--headless",
+            "--disable-dev-shm-usage",
+            "--disable-gpu",
+            "--no-sandbox",
+            "--remote-allow-origins=*"
+        );
+        RemoteWebDriver driver = null;
+        try {
+            driver = new RemoteWebDriver(new URL("http://selenium-server:4444/wd/hub"), options);
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
         Wait<WebDriver> wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         try {
             List<HitterDto> hitterDto = hitterInit(driver, wait);

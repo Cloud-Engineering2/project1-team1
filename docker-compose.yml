@@ -27,7 +27,7 @@ services:
   backend:
     container_name: myteam-server
     build:
-      context: docker
+      context: .
       dockerfile: Dockerfile
     ports:
       - 8080:8080
@@ -39,6 +39,17 @@ services:
     networks:
       - myteam-network
 
+  selenium:
+    container_name: selenium-server
+    image: seleniarm/standalone-chromium
+    platform: linux/amd64
+    ports:
+      - 4444:4444
+      - 7900:7900
+    shm_size: 2gb
+    networks:
+      - myteam-network
+      
 networks:
   myteam-network:
     driver: bridge
