@@ -1,0 +1,55 @@
+services:
+  db:
+    container_name: mysql-server
+    image: mysql:latest
+    volumes:
+      - type: bind
+        source: /home/myteam/data/mysql
+        target: /var/lib/mysql
+      - type: bind
+        source: /home/ubuntu/app/project1-team1/src/main/resources/static/sql
+        target: /docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: myteam
+      MYSQL_USER: myteam
+      MYSQL_PASSWORD: myteam
+    networks:
+      - myteam-network
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD']
+      interval: 10s
+      timeout: 2s
+      retries: 100
+
+  backend:
+    container_name: myteam-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      MYSQL_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - myteam-network
+
+  selenium:
+    container_name: selenium-server
+    image: seleniarm/standalone-chromium
+    platform: linux/amd64
+    ports:
+      - 4444:4444
+      - 7900:7900
+    shm_size: 2gb
+    networks:
+      - myteam-network
+
+networks:
+  myteam-network:
+    driver: bridge
